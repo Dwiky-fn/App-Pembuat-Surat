@@ -7,4 +7,4 @@ Soon:
 2. Dapat Meminjam barang lebih dari 1
 
 Hubungi: (Kritik & Saran)
-(WhatsApp: 083151567751)
+(Email: ardiii2306@gmail.com)
