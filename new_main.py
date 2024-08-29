@@ -197,13 +197,13 @@ def srt_pemberitahuan():
         output.seek(0)
 
         # Tombol untuk mengunduh surat
-        st.download_button(
+        download = st.download_button(
             label = "Simpan Surat",
             data = output.getvalue(),
             file_name = f'{nomor} Pemberitahuan {tujuan}.docx',
             mime = 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
         )
-        
+
         path_file = "arsip.xlsx"
 
         data = [{
@@ -222,8 +222,10 @@ def srt_pemberitahuan():
         for r_idx, row in enumerate(dataframe_to_rows(df_baru, index=False, header=False), start=startrow+1):
             for c_idx, value in enumerate(row, start=1):
                 sheet.cell(row=r_idx, column=c_idx, value=value)
-        book.save(path_file)
-        st.success('Data tersimpan')
+        if download:
+            book.save(path_file)
+            st.success('Data tersimpan')
+
 def arsip_srt():
     st.title("Arsip Surat")
     path_file = "arsip.xlsx"
