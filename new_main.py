@@ -1,10 +1,13 @@
+import pandas as pd
 import streamlit as st
-from docx import Document
 from io import BytesIO
+from docx import Document
 from docx.shared import Pt
 from docx.oxml.ns import qn
 from datetime import datetime
+from openpyxl import load_workbook
 from babel.dates import format_date
+from openpyxl.utils.dataframe import dataframe_to_rows
 
 # Atur locale ke bahasa Indonesia
 
@@ -185,6 +188,28 @@ def srt_pemberitahuan():
                             for run in paragraph.runs:
                                 run.text = run.text.replace('{nim_sekre}', nim_sekre)
                                 set_font(run)
+
+        # Membaca file Excel yang sudah ada
+        path_file = "arsip.xlsx"
+
+        data = [{
+            "no surat": no_srt,
+            "tanggal": tanggal,
+            "kegiatan": kegiatan,
+            "tujuan": tujuan,
+            "perihal": "Pemberitahuan"
+        }]
+
+        df_baru = pd.DataFrame(data)
+        book = load_workbook(path_file)
+        sheet = book.active
+
+        startrow = sheet.max_row
+        for r_idx, row in enumerate(dataframe_to_rows(df_baru, index=False, header=False), start=startrow+1):
+            for c_idx, value in enumerate(row, start=1):
+                sheet.cell(row=r_idx, column=c_idx, value=value)
+        book.save(path_file)
+        st.success('Data tersimpan')
 
         # Simpan dokumen ke BytesIO
         output = BytesIO()
