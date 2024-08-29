@@ -190,6 +190,20 @@ def srt_pemberitahuan():
                                 set_font(run)
 
         # Membaca file Excel yang sudah ada
+
+        # Simpan dokumen ke BytesIO
+        output = BytesIO()
+        doc.save(output)
+        output.seek(0)
+
+        # Tombol untuk mengunduh surat
+        st.download_button(
+            label = "Simpan Surat",
+            data = output.getvalue(),
+            file_name = f'{nomor} Pemberitahuan {tujuan}.docx',
+            mime = 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+        )
+        
         path_file = "arsip.xlsx"
 
         data = [{
@@ -210,19 +224,6 @@ def srt_pemberitahuan():
                 sheet.cell(row=r_idx, column=c_idx, value=value)
         book.save(path_file)
         st.success('Data tersimpan')
-
-        # Simpan dokumen ke BytesIO
-        output = BytesIO()
-        doc.save(output)
-        output.seek(0)
-
-        # Tombol untuk mengunduh surat
-        st.download_button(
-            label = "Simpan Surat",
-            data = output.getvalue(),
-            file_name = f'{nomor} Pemberitahuan {tujuan}.docx',
-            mime = 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
-        )
 def arsip_srt():
     st.title("Arsip Surat")
     path_file = "arsip.xlsx"
