@@ -5,3 +5,4 @@ google-auth
 google-api-python-client
 oauth2client
 Babel
+openpyxl
