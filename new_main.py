@@ -7,10 +7,7 @@ from datetime import datetime
 import locale
 
 # Atur locale ke bahasa Indonesia
-try:
-    locale.setlocale(locale.LC_ALL, 'id_ID.UTF-8')
-except locale.Error:
-    locale.setlocale(locale.LC_ALL, 'C')  # Fallback ke locale default
+locale.setlocale(locale.LC_ALL, 'id_ID.UTF-8')
 
 # Fungsi untuk mengatur font dan ukuran teks
 def set_font(run, font_name='Times New Roman', font_size=12):
