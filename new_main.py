@@ -4,10 +4,9 @@ from io import BytesIO
 from docx.shared import Pt
 from docx.oxml.ns import qn
 from datetime import datetime
-import locale
+from babel.dates import format_date
 
 # Atur locale ke bahasa Indonesia
-locale.setlocale(locale.LC_ALL, 'id_ID.UTF-8')
 
 # Fungsi untuk mengatur font dan ukuran teks
 def set_font(run, font_name='Times New Roman', font_size=12):
@@ -58,7 +57,7 @@ def srt_pemberitahuan():
     st.write(f"Nomor Surat: {no_srt}")
     
     # Tanggal Pembuatan Surat
-    tanggal_input = datetime.now().date().strftime("%d %B %Y")
+    tanggal_input = format_date(datetime.now().date(), format='d MMMM yyyy', locale='id_ID')
     tanggal = st.text_input('Tanggal Pembuatan Surat', value=tanggal_input)
 
     tujuan_srt = st.radio('Tujuan:', ('KEMENDAGRI BEM', 'Lainnya'))
@@ -72,23 +71,23 @@ def srt_pemberitahuan():
     opsi_hari = ["Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu", "Minggu"]
     pilih_hari = st.multiselect('Hari:', opsi_hari, placeholder="Pilih Hari Kegiatan")
     hari = ' – '.join(pilih_hari)
-    # hari = st.text_area('Hari Kegiatan', value=hari_inp, disabled=True)
     
     # Tanggal Kegiatan
     with st.expander("Tanggal Kegiatan", expanded=False):
         st.write("Pilih tanggal mulai dan selesai:")
 
         # Pilih tanggal mulai
-        tanggal_mulai = st.date_input('Pilih Tanggal Mulai', value=datetime(2024, 1, 1))
-
+        tanggal_mulaii = st.date_input('Pilih Tanggal Mulai', value=datetime(2024, 1, 1))
+        tanggal_mulai = format_date(tanggal_mulaii, format='d MMMM yyyy', locale='id_ID')
         # Opsi untuk memilih tanggal selesai
         opsi_selesai = st.radio("Atur tanggal selesai?", ("1 Hari", "Lebih dari 1 Hari"))
 
         if opsi_selesai == "Lebih dari 1 Hari":
-            tanggal_selesai = st.date_input('Pilih Tanggal Selesai', value=datetime(2024, 1, 3))
-            tanggal_keg = st.text_input("",value=f"{tanggal_mulai.strftime('%d %B %Y')} – {tanggal_selesai.strftime('%d %B %Y')}")
+            tanggal_selesaii = st.date_input('Pilih Tanggal Selesai', value=datetime(2024, 1, 3))
+            tanggal_selesai = format_date(tanggal_selesaii, format='d MMMM yyyy', locale='id_ID') 
+            tanggal_keg = st.text_input("",value=f"{tanggal_mulai} – {tanggal_selesai}")
         elif opsi_selesai == "1 Hari":
-            tanggal_keg = st.text_input("",value=f"{tanggal_mulai.strftime('%d %B %Y')}")
+            tanggal_keg = st.text_input("",value=f"{tanggal_mulai}")
 
     st.write("Tanggal Kegiatan: ",tanggal_keg)
 
