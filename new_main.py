@@ -223,16 +223,33 @@ def srt_pemberitahuan():
             file_name = f'{nomor} Pemberitahuan {tujuan}.docx',
             mime = 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
         )
+def arsip_srt():
+    st.title("Arsip Surat")
+    path_file = "arsip.xlsx"
+    df = pd.read_excel(path_file)
+    header = {
+        "no surat": "Nomor Surat",
+        "tanggal": "Tanggal",
+        "kegiatan": "Kegiatan",
+        "tujuan": "Tujuan",
+        "perihal": "Perihal"
+    }
+    df.rename(columns=header, inplace=True)
+    df.index = df.index + 1
+
+    st.table(df)
 
 def main():
     st.sidebar.title('Aplikasi Pembuat Surat Otomatis')
 
-    surat = st.sidebar.radio('Menu', ('Pemberitahuan', 'Peminjaman'))
+    surat = st.sidebar.radio('Menu', ('Pemberitahuan', 'Peminjaman', 'Arsip'))
     
     if surat == 'Pemberitahuan':
         srt_pemberitahuan()
     elif surat == 'Peminjaman':
         pass  # Fungsi srt_peminjaman bisa ditambahkan
+    elif surat == 'Arsip':
+        arsip_srt()
 
 if __name__ == '__main__':
     main()
