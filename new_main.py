@@ -53,7 +53,7 @@ def srt_pemberitahuan():
 
         # Format nomor surat
         if panitia:
-            no_srt = st.text_input("Nomor Surat", value=f"{nomor}/HMJTE/{panitia}/{bulan_romawi}/{tahun}")
+            no_srt = st.text_input("Nomor Surat", value=f"{nomor}/{panitia}/HMJTE/{bulan_romawi}/{tahun}")
         else:
             no_srt = st.text_input("Nomor Surat", value=f"{nomor}/HMJTE/{bulan_romawi}/{tahun}")
             
@@ -195,9 +195,9 @@ def srt_pemberitahuan():
         data = [{
             "no surat": no_srt,
             "tanggal": tanggal,
-            "kegiatan": kegiatan,
+            "perihal": "Pemberitahuan",
             "tujuan": tujuan,
-            "perihal": "Pemberitahuan"
+            "kegiatan": kegiatan
         }]
 
         df_baru = pd.DataFrame(data)
@@ -230,9 +230,9 @@ def arsip_srt():
     header = {
         "no surat": "Nomor Surat",
         "tanggal": "Tanggal",
-        "kegiatan": "Kegiatan",
+        "perihal": "Perihal",
         "tujuan": "Tujuan",
-        "perihal": "Perihal"
+        "kegiatan": "Kegiatan"
     }
     df.rename(columns=header, inplace=True)
     df.index = df.index + 1
