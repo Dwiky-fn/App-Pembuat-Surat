@@ -10,6 +10,8 @@ from babel.dates import format_date
 from openpyxl.utils.dataframe import dataframe_to_rows
 
 # Atur locale ke bahasa Indonesia
+def get_day_name(date):
+    return format_date(date, 'EEEE', locale='id_ID')
 
 # Fungsi untuk mengatur font dan ukuran teks
 def set_font(run, font_name='Times New Roman', font_size=12):
@@ -32,7 +34,7 @@ def srt_pemberitahuan():
     # Input untuk bagian-bagian nomor surat
     with st.expander("Nomor Surat", expanded=False):
         nomor = st.text_input('Nomor Urut', '001')
-        panitia = st.text_input('Kepanitiaan (Opsional)', placeholder='Cth: PAN-RAIS')
+        panitia = st.text_input('Kepanitiaan (Opsional)', placeholder='Cth: PAN-RAIS').upper()
         bulan_romawi_list = {
             "Januari": "I",
             "Februari": "II",
@@ -60,7 +62,7 @@ def srt_pemberitahuan():
     st.write(f"Nomor Surat: {no_srt}")
     
     # Tanggal Pembuatan Surat
-    tanggal_input = format_date(datetime.now().date(), format='d MMMM yyyy', locale='id_ID')
+    tanggal_input = format_date(datetime.now().date(), format='d MMMM Y', locale='id_ID')
     tanggal = st.text_input('Tanggal Pembuatan Surat', value=tanggal_input)
 
     tujuan_srt = st.radio('Tujuan:', ('KEMENDAGRI BEM', 'Lainnya'))
@@ -71,28 +73,29 @@ def srt_pemberitahuan():
     kegiatan = st.text_input('Kegiatan', placeholder='Cth: Rapat Kerja Kepengurusan HMJ Teknik Elektro')
 
     # Hari Kegiatan
-    opsi_hari = ["Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu", "Minggu"]
-    pilih_hari = st.multiselect('Hari:', opsi_hari, placeholder="Pilih Hari Kegiatan")
-    hari = ' – '.join(pilih_hari)
     
-    # Tanggal Kegiatan
     with st.expander("Tanggal Kegiatan", expanded=False):
-        st.write("Pilih tanggal mulai dan selesai:")
+        st.write("Pilih hari dan tanggal kegiatan:")
 
         # Pilih tanggal mulai
-        tanggal_mulaii = st.date_input('Pilih Tanggal Mulai', value=datetime(2024, 1, 1))
+        tanggal_mulaii = st.date_input('Pilih Tanggal Mulai', value=datetime(2024, 9, 1))
         tanggal_mulai = format_date(tanggal_mulaii, format='d MMMM yyyy', locale='id_ID')
+        hari_mulai = get_day_name(tanggal_mulaii)
+
         # Opsi untuk memilih tanggal selesai
         opsi_selesai = st.radio("Atur tanggal selesai?", ("1 Hari", "Lebih dari 1 Hari"))
 
         if opsi_selesai == "Lebih dari 1 Hari":
-            tanggal_selesaii = st.date_input('Pilih Tanggal Selesai', value=datetime(2024, 1, 3))
-            tanggal_selesai = format_date(tanggal_selesaii, format='d MMMM yyyy', locale='id_ID') 
-            tanggal_keg = st.text_input("",value=f"{tanggal_mulai} – {tanggal_selesai}")
-        elif opsi_selesai == "1 Hari":
-            tanggal_keg = st.text_input("",value=f"{tanggal_mulai}")
+            tanggal_selesaii = st.date_input('Pilih Tanggal Selesai', value=datetime(2024, 9, 5))
+            tanggal_selesai = format_date(tanggal_selesaii, format='d MMMM yyyy', locale='id_ID')
+            hari_selesai = get_day_name(tanggal_selesaii)
+            tanggal_keg = st.text_input("", value=f"{tanggal_mulai} – {tanggal_selesai}")
+            hari = f"{hari_mulai} – {hari_selesai}"
+        else:
+            tanggal_keg = st.text_input("", value=f"{tanggal_mulai}")
+            hari = hari_mulai
 
-    st.write("Tanggal Kegiatan: ",tanggal_keg)
+    st.write(f"Tanggal Kegiatan: {hari}, {tanggal_keg}")
 
     # Jam Kegiatan
     with st.expander("Waktu Kegiatan", expanded=False):
@@ -103,7 +106,7 @@ def srt_pemberitahuan():
         menit_mulai = st.slider('Pilih Menit Mulai', 0, 59, 0)
 
         # Pilih jam dan menit untuk waktu selesai
-        opsi_selesai = st.radio("Atur waktu selesai?", ("Ya", "Tidak"))
+        opsi_selesai = st.radio("Atur waktu selesai?", ("Ya", "Tidak"),index=1)
 
         if opsi_selesai == "Ya":
             jam_selesai = st.slider('Pilih Jam Selesai', 0, 23, 9)
