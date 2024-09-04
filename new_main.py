@@ -1,4 +1,3 @@
-import subprocess
 import pandas as pd
 import streamlit as st
 from io import BytesIO
@@ -13,16 +12,6 @@ from openpyxl.utils.dataframe import dataframe_to_rows
 # Atur locale ke bahasa Indonesia
 def get_day_name(date):
     return format_date(date, 'EEEE', locale='id_ID')
-
-def upload_to_github(file_path, commit_message="Update surat pemberitahuan"):
-    # Menambahkan file ke staging area
-    subprocess.run(["git", "add", file_path], check=True)
-
-    # Commit perubahan dengan pesan tertentu
-    subprocess.run(["git", "commit", "-m", commit_message], check=True)
-
-    # Push ke repository remote
-    subprocess.run(["git", "push"], check=True)
 
 # Fungsi untuk mengatur font dan ukuran teks
 def set_font(run, font_name='Times New Roman', font_size=12):
@@ -229,13 +218,6 @@ def srt_pemberitahuan():
         output = BytesIO()
         doc.save(output)
         output.seek(0)
-
-        # Simpan dokumen ke file lokal sebelum mengunggah ke GitHub
-        local_file_path = f"{nomor}_Pemberitahuan_{tujuan}.docx"
-        with open(local_file_path, "wb") as f:
-            f.write(output.getvalue())
-
-        upload_to_github(local_file_path)
 
         # Tombol untuk mengunduh surat
         st.download_button(
