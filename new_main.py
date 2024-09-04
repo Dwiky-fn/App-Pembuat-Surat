@@ -53,7 +53,7 @@ def srt_pemberitahuan():
 
         # Format nomor surat
         if panitia:
-            no_srt = st.text_input("Nomor Surat", value=f"{nomor}/{panitia}/HMJTE/{bulan_romawi}/{tahun}")
+            no_srt = st.text_input("Nomor Surat", value=f"{nomor}/HMJTE/{panitia}/{bulan_romawi}/{tahun}")
         else:
             no_srt = st.text_input("Nomor Surat", value=f"{nomor}/HMJTE/{bulan_romawi}/{tahun}")
             
